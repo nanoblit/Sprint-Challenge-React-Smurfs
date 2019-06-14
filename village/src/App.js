@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Route, NavLink } from 'react-router-dom';
 import axios from 'axios';
 
 import './App.css';
@@ -14,7 +15,6 @@ const App = () => {
     try {
       const res = await axios.get(smurfsUrl);
       setSmurfs(res.data);
-      console.log(smurfs);
     } catch (err) {
       console.log(err.message);
     }
@@ -24,7 +24,6 @@ const App = () => {
     try {
       await axios.post(smurfsUrl, inputData);
       getSmurfs();
-      console.log(smurfs);
     } catch (err) {
       console.log(err.message);
     }
@@ -52,14 +51,23 @@ const App = () => {
   // You'll need to make sure you have the right properties on state and pass them down to props.
   return (
     <div className="App">
-      <SmurfForm
-        addSmurf={addSmurf}
-        handleInputChange={handleInputChange}
-        name={inputData.name}
-        age={inputData.age}
-        height={inputData.height}
+      <nav>
+        <NavLink to="/">Smurfs</NavLink>
+        <NavLink to="/smurf-form">Add smurf</NavLink>
+      </nav>
+      <Route path="/" exact render={() => <Smurfs smurfs={smurfs} />} />
+      <Route
+        path="/smurf-form"
+        render={() => (
+          <SmurfForm
+            addSmurf={addSmurf}
+            handleInputChange={handleInputChange}
+            name={inputData.name}
+            age={inputData.age}
+            height={inputData.height}
+          />
+        )}
       />
-      <Smurfs smurfs={smurfs} />
     </div>
   );
 };
